@@ -136,4 +136,4 @@ dist
 .pnp.*
 
 # Project Logic
-.txt*
+*.txt
