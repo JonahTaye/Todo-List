@@ -99,8 +99,8 @@
                                 </select>
                             </div>
                             <div class="buttons">
-                                <button class="cancel">Cancel</button>
-                                <button class="add-btn">Add</button>
+                                <button type="submit" class="cancel">Cancel</button>
+                                <button type="submit" class="add-btn">Add</button>
                             </div>
                         </form>
                     </dialog>
@@ -117,33 +117,6 @@
                         </form>
                     </dialog>
                 </div>
-                <script>
-                    const dialog = document.querySelector(".task-dialog")
-                    const groupDialog = document.querySelector(".group-dialog")
-                    const div = document.querySelector(".dialog-container")
-                    const add = document.querySelector(".mainbtn")
-                    const addgroup = document.querySelector(".groupbtn")
-                    const closeBtn = document.querySelector(".cancel")
-
-                    add.addEventListener("click", () => {
-                        div.style.display = "block"
-                        dialog.showModal()
-                    })
-
-                    div.addEventListener("click", () => {
-                        div.style.display = "none"
-                        dialog.close()
-                    })
-
-                    addgroup.addEventListener("click", () => {
-                        div.style.display = "block"
-                        groupDialog.showModal()
-                    })
-
-                    closeBtn.addEventListener("click", () => {
-                        dialog.close()
-                    })
-                </script>
             </div>
         </div>
     </div>
