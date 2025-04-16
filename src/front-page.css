@@ -22,7 +22,7 @@ body {
 }
 
 .side-pane {
-    background-color: red;
+    background-color: rgb(189, 20, 20);;
     height: 100vh;
     flex-direction: column;
     gap: 1.5rem;
@@ -33,6 +33,7 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none; 
     font-size: clamp(1.2rem, 1.5vw, 3rem);
+    user-select: none;
 }
 
 .side-pane::-webkit-scrollbar {
@@ -57,11 +58,22 @@ body {
 
 .options {
     display: grid;
-    gap: 0.5rem;
+    gap: 0.1rem;
+    margin-top: 0.5rem;
 }
 
 .options * {
-    padding: 0.1rem 0.5rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.3rem;
+    cursor: pointer;
+}
+
+.options *:not(.active):hover {
+    background-color: rgba(212, 97, 97, 0.432);
+}
+
+.active {
+    background-color: rgba(207, 194, 194, 0.322);
 }
 
 .group, .content {
@@ -88,14 +100,20 @@ body {
     align-items: center;
     width: 1.5rem;
     height: 1.5rem;
+    cursor: pointer;
 }
 
-.content.header:hover > .add.mainbtn, 
-.group.header:hover > .add.groupbtn {
+.content.header:hover > .add.mainbtn {
     background-color: rgb(189, 20, 20);
-    padding: 0rem;
     font-size: 1.2rem;
     border-radius: 50%;    
+}
+
+.group.header:hover > .add.groupbtn {
+    color: rgb(189, 20, 20);
+    background-color: rgb(207, 194, 194);
+    font-size: 1.2rem;
+    border-radius: 50%; 
 }
 
 .main-content {
@@ -133,6 +151,7 @@ img {
 form {
     display: grid;
     gap: 0.5rem;
+    padding: 1rem;
 }
 
 .input {
@@ -183,7 +202,6 @@ form input, select {
 dialog {
     margin: auto;
     inset: 0;
-    padding: 1rem;
     border-radius: 0.5rem;
     background-color: #131516;
     color: rgb(207, 194, 194);
