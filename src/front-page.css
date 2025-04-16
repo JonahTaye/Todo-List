@@ -110,6 +110,7 @@ body {
     padding: 1rem 2rem;
     margin-bottom: 1rem;
     border: 1px lightcoral solid;
+    border-radius: 0.3rem;
 }
 
 .left-card {
@@ -127,4 +128,63 @@ body {
 
 img {
     width: 2rem;
+}
+
+form {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.input {
+    display: grid;
+    gap: 0.3rem;
+}
+
+label {
+    font-size: clamp(1.2rem, 1.5vw, 3rem);
+}
+
+form input, select {
+    width: max(25vw, 10rem);
+    height: 1.8rem;
+    padding: 0.3rem;
+}
+
+.buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.buttons button {
+    padding: 0.3rem 1rem;
+    font-size: clamp(1rem, 1vw, 2rem);
+    font-weight: 600;
+    border-radius: 0.2rem;
+    border: none;
+}
+
+.add-btn {
+    background-color: rgb(189, 20, 20);
+    color: rgb(207, 194, 194);
+}
+
+.dialog-container {
+    display: none;
+    background-color: rgba(168, 39, 39, 0.062);
+    width: 1000vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+dialog {
+    margin: auto;
+    inset: 0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: #131516;
+    color: rgb(207, 194, 194);
 }
