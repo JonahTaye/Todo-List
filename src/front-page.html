@@ -69,6 +69,81 @@
                         }
                     </script>
                 </div>
+                <div class="dialog-container">
+                    <dialog class="task-dialog">
+                        <form>
+                            <div class="input input-title">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" id="title">
+                            </div>
+                            <div class="input description">
+                                <label for="description">Description</label>
+                                <input type="text" name="description" id="description">
+                            </div>
+                            <div class="input date">
+                                <label for="date">Date</label>
+                                <input type="date" name="date" id="date">
+                            </div>
+                            <div class="input priority">
+                                <label for="priority">Priority</label>
+                                <select name="priority" id="priority">
+                                    <option value="1">High</option>
+                                    <option value="2">Medium</option>
+                                    <option value="3">Low</option>
+                                </select>
+                            </div>
+                            <div class="input group">
+                                <label for="group">Group</label>
+                                <select name="group" id="group">
+                                    
+                                </select>
+                            </div>
+                            <div class="buttons">
+                                <button class="cancel">Cancel</button>
+                                <button class="add-btn">Add</button>
+                            </div>
+                        </form>
+                    </dialog>
+                    <dialog class="group-dialog">
+                        <form>
+                            <div class="input name">
+                                <label for="name">Name</label>
+                                <input type="text" name="name" id="name">
+                            </div>
+                            <div class="buttons">
+                                <button class="cancel">Cancel</button>
+                                <button class="add-btn">Add</button>
+                            </div>
+                        </form>
+                    </dialog>
+                </div>
+                <script>
+                    const dialog = document.querySelector(".task-dialog")
+                    const groupDialog = document.querySelector(".group-dialog")
+                    const div = document.querySelector(".dialog-container")
+                    const add = document.querySelector(".mainbtn")
+                    const addgroup = document.querySelector(".groupbtn")
+                    const closeBtn = document.querySelector(".cancel")
+
+                    add.addEventListener("click", () => {
+                        div.style.display = "block"
+                        dialog.showModal()
+                    })
+
+                    div.addEventListener("click", () => {
+                        div.style.display = "none"
+                        dialog.close()
+                    })
+
+                    addgroup.addEventListener("click", () => {
+                        div.style.display = "block"
+                        groupDialog.showModal()
+                    })
+
+                    closeBtn.addEventListener("click", () => {
+                        dialog.close()
+                    })
+                </script>
             </div>
         </div>
     </div>
