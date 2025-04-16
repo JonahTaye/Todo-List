@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    color: rgb(207, 194, 194);
+}
+
+.page-container {
+    width: 100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(15rem, 20vw) 1fr
+}
+
+.side-pane, .content, .group,
+.left-card, .checkbox, .text-content,
+.card, .right-card {
+    display: flex;
+}
+
+.side-pane {
+    background-color: red;
+    height: 100vh;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+    font-size: clamp(1.2rem, 1.5vw, 3rem);
+}
+
+.side-pane::-webkit-scrollbar {
+    display: none;
+}
+
+.header {
+    border-bottom: 0.15rem rgb(207, 194, 194) solid;
+}
+
+.logo, .content > .title {
+    font-size: clamp(2.5rem, 3.5vw, 5rem);
+    font-weight: 700;
+    padding: 0.2rem 0;
+}
+
+.title {
+    font-size: clamp(2rem, 3vw, 5rem);
+    font-weight: 700;
+    padding: 0.2rem 0;
+}
+
+.options {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.options * {
+    padding: 0.1rem 0.5rem;
+}
+
+.group, .content {
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-container {
+    position: sticky;
+    top: 0;
+    padding: 1rem;
+    background-color: #131516;
+}
+
+
+.card-container {
+    padding: 1rem;
+}
+
+.add {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.content.header:hover > .add.mainbtn, 
+.group.header:hover > .add.groupbtn {
+    background-color: rgb(189, 20, 20);
+    padding: 0rem;
+    font-size: 1.2rem;
+    border-radius: 50%;    
+}
+
+.main-content {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 1rem;
+    background-color: #131516;
+}
+
+.card {
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    margin-bottom: 1rem;
+    border: 1px lightcoral solid;
+}
+
+.left-card {
+    gap: 1rem;
+}
+
+.text-content {
+    flex-direction: column;
+}
+
+.right-card {
+    align-items: center;
+    gap: 1rem;
+}
+
+img {
+    width: 2rem;
+}
