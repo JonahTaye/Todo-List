@@ -28,7 +28,7 @@
             <div class="group-pane">
                 <div class="group header">
                     <div class="title">Group</div>
-                    <div class="add groupbtn">+</div>
+                    <div class="add groupbtn" id="group-btn">+</div>
                 </div>
                 <div class="groups options">
                     
@@ -39,35 +39,26 @@
             <div class="header-container">
                 <div class="content header">
                     <div class="title">Group</div>
-                    <div class="add mainbtn">+</div>
+                    <div class="add mainbtn" id="main-btn">+</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="left-card">
+                    <div class="checkbox">
+                        <input type="checkbox" name="status" id="status">
+                    </div>
+                    <div class="text-content">
+                        <h1 class="title">Template</h1>
+                        <p class="description">This is a template</p>
+                    </div>
+                </div>
+                <div class="right-card">
+                    <div class="date">Feb 25, 2025</div>
+                    <div class="delete"><img src="trash-347 (1).png" alt="delete"></div>
                 </div>
             </div>
             <div class="card-container">
-                <div class="card">
-                    <div class="left-card">
-                        <div class="checkbox">
-                            <input type="checkbox" name="status" id="status">
-                        </div>
-                        <div class="text-content">
-                            <h1 class="title">Template</h1>
-                            <p class="description">This is a template</p>
-                        </div>
-                    </div>
-                    <div class="right-card">
-                        <div class="date">Feb 25, 2025</div>
-                        <div class="delete"><img src="trash-347 (1).png" alt="delete"></div>
-                    </div>
-                    <script>
-                        const card = document.querySelector(".card")
-                        const body = document.querySelector(".card-container")
 
-                        for (let i = 0; i < 10; i++) {
-                            const clone = card.cloneNode(true)
-                            clone.style.display = "flex"
-                            clone.querySelector(".title").textContent += " " + i
-                            body.appendChild(clone)
-                        }
-                    </script>
                 </div>
                 <div class="dialog-container">
                     <dialog class="task-dialog">
