@@ -1,3 +1,5 @@
+import { Group } from "./todo"
+
 export const storage = function() {
     const storedData = {...localStorage}
 
@@ -66,6 +68,11 @@ export const storage = function() {
             }
         }
 
+    }
+
+    const initialGroup = function() {
+        const defaultGroup = new Group(1000000000001, "Default")
+        localStorage.setItem(defaultGroup.id, JSON.stringify(defaultGroup))
     }
 
     return {getTask, getGroup, 
