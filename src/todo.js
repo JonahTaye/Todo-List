@@ -1,6 +1,6 @@
 export class Todo {
     constructor( id, title, description, dueDate, priority, group ) {
-        this.id = id
+        this.taskId = id
         this.title = title
         this.description = description
         this.dueDate = dueDate
@@ -9,9 +9,13 @@ export class Todo {
         this.group = group ?? "Default"
     }
 
-    set id(value) {
-        if(value === "none") this._id = Date.now()
-        else this._id = value
+    set taskId(value) {
+        if(value === "none") this.id = Date.now()
+        else this.id = value
+    }
+
+    get taskId() {
+        return this.id
     }
 
     changeContent(task) {
@@ -30,14 +34,18 @@ export class Todo {
 
 export class Group {
     constructor( id, name, tasks ) {
-        this.id = id
+        this.groupId = id
         this.name = name
         this.tasks = tasks ?? []
     }
 
-    set id(value) {
-        if(value === "none") this._id = Date.now()
-        else this._id = value 
+    set groupId(value) {
+        if(value === "none") this.id = Date.now()
+        else this.id = value 
+    }
+
+    get groupId() {
+        return this.id
     }
 
     changeName() {
