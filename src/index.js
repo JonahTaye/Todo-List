@@ -1,5 +1,7 @@
 import { todayDisplay } from "./today";
 import { forms } from "./forms";
+import { displayGroup } from "./displayModule";
+import { storage } from "./storageManager";
 import "./front-page.css"
 
 const today = document.querySelector("#today")
@@ -11,23 +13,24 @@ const container = document.querySelector(".card-container")
 const options = document.querySelectorAll(".options *")
 
 function clickFunction(event) {
+    const allOptions = document.querySelectorAll(".options *")
     let name = event.target.id
-    options.forEach(option => option.classList.remove("active"))
+    
+    allOptions.forEach(option => option.classList.remove("active"))
+    const clickedOption = document.querySelector(`#${name}`)
+    clickedOption.classList.add("active")
+    
     container.innerHTML = ""
 
     switch(name) {
         case "today":
             todayDisplay()
-            today.classList.add("active")
             break
         case "all-tasks":
-            allTasks.classList.add("active")
             break
         case "upcoming":
-            upcoming.classList.add("active")
             break
         case "completed":
-            completed.classList.add("active")
             break
     }
 }
