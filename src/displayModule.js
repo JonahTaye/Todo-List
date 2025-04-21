@@ -37,6 +37,27 @@ export function displayGroup() {
     }
 }
 
+export function displayCard() {
+    const card = document.querySelector(".card")
+    const container = document.querySelector(".card-container")
+
+    for (let i = 0; i < 10; i++) {
+        const clone = card.cloneNode(true)
+        clone.style.display = "flex"
+        clone.addEventListener("click", updateTask)
+        clone.querySelector(".title").textContent += " " + i
+        container.appendChild(clone)
+    }
+}
+
+function updateTask(event) {
+    console.log(event.target)
+    if (event.target.className != "") {
+        openForm(event, "coool")
+    }
+    
+}
+
 function clickFunction(event) {
     let name = event.target.id
     console.log(name)
