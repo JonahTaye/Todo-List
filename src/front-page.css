@@ -132,6 +132,15 @@ body {
     border-radius: 0.3rem;
 }
 
+.group-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.group-container img {
+    width: 2.5rem;
+}
+
 .left-card {
     gap: 1rem;
 }
