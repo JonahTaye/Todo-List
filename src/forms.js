@@ -1,4 +1,5 @@
 import { addGroup, addTask } from "./storeData"
+import { storage } from "./storageManager"
 
 const groupBtn = document.querySelector("#group-btn")
 const mainBtn = document.querySelector("#main-btn")
@@ -19,13 +20,23 @@ export const forms = function () {
 }
 
 function generateOptions() {
-    const lists = ["Get to Work", "Learn New Things", "Today"]
+    const groups = storage.getAllGroups()
     const select = document.querySelector("#group")
+    const defaultId = 1000000000001
     
-    for (let list in lists) {
+    select.innerHTML = ""
+    for (let group in groups) {
+
+        let currGroup = groups[group]
         const option = document.createElement("option")
-        option.textContent = lists[list]
-        option.value = list
+        
+        if(currGroup.id === defaultId) {
+            option.textContent = "Today"
+            option.selected = true
+        }
+        else option.textContent = currGroup.name
+        
+        option.value = currGroup.id
         select.appendChild(option)
     }
 }
@@ -60,10 +71,7 @@ function editForm(id) {
         const button = form.querySelector(".add-btn") 
         if(id) button.textContent = "Edit"
         else button.textContent = "Add"
-    })
-    
-    
-    
+    })  
 }
 
 export function openForm(event, id) {
