@@ -1,9 +1,12 @@
+import { addGroup, addTask } from "./storeData"
+
 const groupBtn = document.querySelector("#group-btn")
 const mainBtn = document.querySelector("#main-btn")
 const container = document.querySelector(".dialog-container")
 const taskDialog = document.querySelector(".task-dialog")
 const groupDialog = document.querySelector('.group-dialog')
-const taskForm = document.querySelector(".task-dialog > form")
+const taskForm = document.querySelector("#task-form")
+const groupForm = document.querySelector("#group-form")
 
 export const forms = function () {
     const formsList = document.querySelectorAll("form")
@@ -27,29 +30,50 @@ function generateOptions() {
     }
 }
 
-function addId (id) {
+function addId (event, id) {
     const inputExists = taskForm.querySelector("#id")
+    const groupExists = groupForm.querySelector("#id")
+    
 
-    if(inputExists) taskForm.removeChild(inputExists)
+    if(inputExists) {
+        taskForm.removeChild(inputExists)
+    } else if(groupExists) {
+        groupForm.removeChild(groupExists)
+    }
     
     if(id) {
         const inputId = document.createElement("input")
         inputId.value = id
         inputId.id = "id"
-        taskForm.prepend(inputId)
+        
+        if(event.target.id === "group-btn") groupForm.prepend(inputId)
+        else taskForm.prepend(inputId)
+       
     }
+
+    editForm(id)
+}
+
+function editForm(id) {
+    const forms = document.querySelectorAll("form")
+    forms.forEach(form => {
+        const button = form.querySelector(".add-btn") 
+        if(id) button.textContent = "Edit"
+        else button.textContent = "Add"
+    })
+    
+    
+    
 }
 
 export function openForm(event, id) {
-    console.log("called")
     const name = event.target.id
     container.style.display = "block"
-
+    
     generateOptions()
-    addId(id)
+    addId(event, id)
 
     if (name === "group-btn") {
-        console.log("here")
         groupDialog.showModal()
     } else {
         taskDialog.showModal()
@@ -70,17 +94,35 @@ export function closeForm(event) {
 function submitForm(event) {
     event.preventDefault()
     const name = event.submitter.className
+    const formType = event.submitter.id
+    const dialogs = document.querySelectorAll("dialog")
 
-    if (name === "cancel") {
-        const dialogs = document.querySelectorAll("dialog")
-        dialogs.forEach(dialog => {if(dialog.open) dialog.close()})
-        container.style.display = "none"
-    } else if (name === "add-btn") {
-        addTask()
+    if (name === "add-btn") {
+        save(formType)
     }
+
+   
+    dialogs.forEach(dialog => {if(dialog.open) dialog.close()})
+    container.style.display = "none"
 }
 
+function save(formType) {
+    let form = []
+    let values = []
 
+    if(formType === "task") {
+        const inputs = taskForm.querySelectorAll("input")
+        const selects = taskForm.querySelectorAll("select")
+        form = [...inputs, ...selects]
+        form.forEach(v => values.push(v.value))
+        addTask(form, values)
+    } else {
+        const input = groupForm.querySelector("input")
+        values = ["none", input.value]
+        addGroup(values)
+    }
+
+}
 
 
 
