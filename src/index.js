@@ -36,6 +36,8 @@ function clickFunction(event) {
 }
 
 forms()
+storage.initialGroup()
+displayGroup()
 console.log("back")
 
 options.forEach(option => option.addEventListener("click", clickFunction))
