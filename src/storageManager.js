@@ -1,7 +1,10 @@
 import { Group } from "./todo"
 
 export const storage = function() {
-    const storedData = {...localStorage}
+    const getStoredData = function() {
+        const storedData = {...localStorage}
+        return storedData
+    }
 
     const getTask = function(id) {
         const key = id
@@ -14,8 +17,20 @@ export const storage = function() {
     }
 
     const getGroup = function(id) {
+        let storedData = getStoredData()
         const key = id
+        console.log(Object.keys(storedData).length == 0)
         return JSON.parse(storedData[key])
+    }
+
+    const getAllGroups = function() {
+        const groups = {...localStorage}
+        const allGroups = {}
+        for( let group in groups) {
+            allGroups[group] = JSON.parse(groups[group])
+        }
+
+        return allGroups
     }
 
     const updateTask = function(newTask) {
@@ -32,14 +47,11 @@ export const storage = function() {
     }
     const setTask = function(newTask) {
         const key = newTask.group
-        const group = JSON.parse(storedData[key])
-        const exists = group.tasks.some(oldTask => oldTask.id === newTask.id)
-        
-        if (exists) return
-        else {
-            group.tasks.push(newTask)
-            localStorage.setItem(key, JSON.stringify(group))
-        }
+        const group = getGroup(key)
+        console.log("Before: ", group.tasks)
+        group.tasks.push(newTask)
+        console.log("After: ", group.tasks)
+        localStorage.setItem(key, JSON.stringify(group))
     }
 
     const setGroup = function(group) {
@@ -71,12 +83,21 @@ export const storage = function() {
     }
 
     const initialGroup = function() {
-        const defaultGroup = new Group(1000000000001, "Default")
-        localStorage.setItem(defaultGroup.id, JSON.stringify(defaultGroup))
+        const storedData = getStoredData()
+
+        if (Object.keys(storedData).length == 0) {
+            const defaultId = 1000000000001
+            const defaultName = "Default"
+            const defaultGroup = new Group(defaultId, defaultName)
+            
+            localStorage.setItem(defaultId, JSON.stringify(defaultGroup))
+            return defaultId
+        }
     }
 
     return {getTask, getGroup, 
             setTask, setGroup, 
             deleteGroup, deleteTask, 
-            updateTask, }
+            updateTask, getAllGroups,
+            initialGroup}
 }()
