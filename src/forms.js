@@ -1,6 +1,6 @@
 import { addGroup, addTask } from "./storeData"
 import { storage } from "./storageManager"
-import { todayDisplayCard } from "./today"
+import { displayCardAll, displayCompletedCard, displayUpcomingCard, todayDisplayCard } from "./today"
 
 const groupBtn = document.querySelector("#group-btn")
 const mainBtn = document.querySelector("#main-btn")
@@ -160,7 +160,20 @@ function save(formType, formName) {
         addGroup(input, values)
     }
 
-    if (formName === "today") todayDisplayCard()
+    switch(formName){
+        case "today":
+            todayDisplayCard()
+            break
+        case "upcoming":
+            displayUpcomingCard()
+            break
+        case "completed":
+            displayCompletedCard()
+            break
+        case "all-tasks":
+            displayCardAll()
+            break
+    } 
 
 }
 
