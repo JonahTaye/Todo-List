@@ -1,6 +1,6 @@
 import { storage } from "./storageManager"
 import { Todo, Group } from "./todo"
-import { displayCard, displayGroup } from "./displayModule"
+import { displayCard, displayGroup, removeCard } from "./displayModule"
 
 export function addTask(form, values) {
     const formwithId = 6
@@ -34,6 +34,12 @@ export function addGroup(form, values) {
 
 export function changeStatus(id) {
     let task = storage.getTask(parseInt(id))
-    task.status = true
+    task.status = task.status === true ? false : true
     storage.updateTask(task)
+    removeCard(id)
+}
+
+export function deleteTask(id) {
+    storage.deleteTask(parseInt(id))
+    removeCard(id)
 }
