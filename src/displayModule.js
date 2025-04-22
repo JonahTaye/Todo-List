@@ -1,7 +1,8 @@
 import { storage } from "./storageManager"
 import { openForm } from "./forms"
-import { changeStatus } from "./storeData"
+import { changeStatus, deleteTask } from "./storeData"
 import edit from "./edit.png"
+import { displayGroupCard } from "./today"
 
 export function displayGroup() {
     const options = document.querySelector(".groups.options")
@@ -38,6 +39,8 @@ export function displayGroup() {
     }
 }
 
+
+
 export function displayCard(tasks) {
     const card = document.querySelector(".card")
     const container = document.querySelector(".card-container")
@@ -56,6 +59,7 @@ export function displayCard(tasks) {
         date.textContent = task.dueDate
         const checkbox = clone.querySelector("#status")
 
+
         switch (task.priority) {
             case 1:
                 clone.style.borderLeft = "1rem solid red"
@@ -72,27 +76,68 @@ export function displayCard(tasks) {
     }
 }
 
+export function removeCard(id) {
+    id = parseInt(id)
+    const cards = document.querySelectorAll(".card")
+
+    cards.forEach(card => {
+        const cardId = parseInt(card.dataset.id)
+        console.log(cardId, "id", id)
+        if(cardId === id) {
+            for (let i = 9; i > -2; i--) {
+                let timedelay = 1000 - i*100
+                setTimeout(() => {
+                    card.style.opacity = `0.${i}`
+                    const trash = card.querySelector("img")
+                
+                    card.style.height = `${i - (card.offsetHeight)}rem`
+                    trash.style.height = `0.${i}rem`
+                    card.style.padding = `0.${i}rem`
+                    card.style.marginBottom = `0.${i}rem`
+                    card.style.fontSize = `0.${i}rem`
+                    card.style.transition = "opacity ease-out 1s"
+                    card.style.transition = "height ease-out 1s"
+                    card.style.transition = "font-size ease-out 1s"
+                    
+                }, timedelay);
+            }
+
+            setTimeout(() => {
+                card.remove()
+            }, 1700);
+        }
+    })
+}
+
 function updateTask(event) {
     const card = event.target.closest(".card")
-    
+    const id = event.target.id
+    console.log(event.target)
     if (event.target.className != "") {
         openForm(event, card.dataset.id)
     }
 
-    if (event.target.id === "status") {
+    if (id === "status") {
         changeStatus(card.dataset.id)
+    } else if(id === "delete") {
+        deleteTask(card.dataset.id)
     }
     
 }
 
 function clickFunction(event) {
     let name = event.target.id
-    
     if(name != "group-btn") {
         const options = document.querySelectorAll(".options *")
+        const id = name.split("_")[1]
 
         options.forEach(option => option.classList.remove("active"))
         const clickedOption = document.querySelector(`#${name}`)
         clickedOption.classList.add("active")
+
+        displayGroupCard(id)
     }
+    console.log("name", name)
+    
 }
+
