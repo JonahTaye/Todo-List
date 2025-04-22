@@ -2,7 +2,7 @@ import { storage } from "./storageManager"
 import { openForm } from "./forms"
 import { changeStatus, deleteTask } from "./storeData"
 import edit from "./edit.png"
-import { displayGroupCard } from "./today"
+import { displayGroupCard } from "./sidePaneOptions"
 
 export function displayGroup() {
     const options = document.querySelector(".groups.options")

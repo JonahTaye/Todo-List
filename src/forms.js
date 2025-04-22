@@ -1,6 +1,6 @@
 import { addGroup, addTask } from "./storeData"
 import { storage } from "./storageManager"
-import { displayCardAll, displayCompletedCard, displayUpcomingCard, todayDisplayCard } from "./today"
+import { displayCardAll, displayCompletedCard, displayUpcomingCard, todayDisplayCard } from "./sidePaneOptions"
 
 const groupBtn = document.querySelector("#group-btn")
 const mainBtn = document.querySelector("#main-btn")
