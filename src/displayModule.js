@@ -1,5 +1,6 @@
 import { storage } from "./storageManager"
 import { openForm } from "./forms"
+import { changeStatus } from "./storeData"
 import edit from "./edit.png"
 
 export function displayGroup() {
@@ -37,30 +38,56 @@ export function displayGroup() {
     }
 }
 
-export function displayCard() {
+export function displayCard(tasks) {
     const card = document.querySelector(".card")
     const container = document.querySelector(".card-container")
-
-    for (let i = 0; i < 10; i++) {
+    
+    for (let task of tasks) {
         const clone = card.cloneNode(true)
         clone.style.display = "flex"
+        clone.dataset.id = task.id
         clone.addEventListener("click", updateTask)
-        clone.querySelector(".title").textContent += " " + i
+        
+        const title = clone.querySelector(".title")
+        title.textContent = task.title
+        const description = clone.querySelector(".description")
+        description.textContent = task.description
+        const date = clone.querySelector(".date")
+        date.textContent = task.dueDate
+        const checkbox = clone.querySelector("#status")
+
+        switch (task.priority) {
+            case 1:
+                clone.style.borderLeft = "1rem solid red"
+                break
+            case 2:
+                clone.style.borderLeft = "1rem solid yellow"
+                break
+            case 3: 
+                clone.style.borderLeft = "1rem solid green"
+                break
+        }
+
         container.appendChild(clone)
     }
 }
 
 function updateTask(event) {
-    console.log(event.target)
+    const card = event.target.closest(".card")
+    
     if (event.target.className != "") {
-        openForm(event, "coool")
+        openForm(event, card.dataset.id)
+    }
+
+    if (event.target.id === "status") {
+        changeStatus(card.dataset.id)
     }
     
 }
 
 function clickFunction(event) {
     let name = event.target.id
-    console.log(name)
+    
     if(name != "group-btn") {
         const options = document.querySelectorAll(".options *")
 
@@ -68,5 +95,4 @@ function clickFunction(event) {
         const clickedOption = document.querySelector(`#${name}`)
         clickedOption.classList.add("active")
     }
-    
 }
