@@ -7,6 +7,7 @@ export const storage = function() {
     }
 
     const getTask = function(id) {
+        const storedData = getStoredData()
         const key = id
         for (let data in storedData) {
             const group = JSON.parse(storedData[data])
@@ -19,7 +20,6 @@ export const storage = function() {
     const getGroup = function(id) {
         let storedData = getStoredData()
         const key = id
-        console.log(Object.keys(storedData).length == 0)
         return JSON.parse(storedData[key])
     }
 
@@ -34,6 +34,7 @@ export const storage = function() {
     }
 
     const updateTask = function(newTask) {
+        const storedData = getStoredData()
         for (let data in storedData) {
             const group = JSON.parse(storedData[data])
             
@@ -45,12 +46,23 @@ export const storage = function() {
             }
         }
     }
+
+    const updateGroup = function(newGroup) {
+        const storedData = getStoredData()
+        for (let data in storedData) {
+            const oldGroup = JSON.parse(storedData[data])
+            if (oldGroup.id === newGroup.id) {
+                newGroup.tasks = oldGroup.tasks
+                deleteGroup(oldGroup.id)
+                setGroup(newGroup)
+            }
+        }
+    }
+
     const setTask = function(newTask) {
         const key = newTask.group
         const group = getGroup(key)
-        console.log("Before: ", group.tasks)
         group.tasks.push(newTask)
-        console.log("After: ", group.tasks)
         localStorage.setItem(key, JSON.stringify(group))
     }
 
@@ -65,6 +77,7 @@ export const storage = function() {
     }
 
     const deleteTask = function(id) {
+        const storedData = getStoredData()
         const key = id
         
         for (let data in storedData) {
@@ -98,6 +111,6 @@ export const storage = function() {
     return {getTask, getGroup, 
             setTask, setGroup, 
             deleteGroup, deleteTask, 
-            updateTask, getAllGroups,
-            initialGroup}
+            updateTask, updateGroup,
+            getAllGroups, initialGroup}
 }()
