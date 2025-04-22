@@ -1,5 +1,6 @@
 import { addGroup, addTask } from "./storeData"
 import { storage } from "./storageManager"
+import { todayDisplayCard } from "./today"
 
 const groupBtn = document.querySelector("#group-btn")
 const mainBtn = document.querySelector("#main-btn")
@@ -11,12 +12,14 @@ const groupForm = document.querySelector("#group-form")
 
 export const forms = function () {
     const formsList = document.querySelectorAll("form")
+    const cancel = document.querySelector(".cancel")
     const hasId = null
 
     formsList.forEach(form => form.addEventListener("submit", submitForm))
     groupBtn.addEventListener("click", (event) => openForm(event, hasId))
     mainBtn.addEventListener("click", (event) => openForm(event, hasId))
     container.addEventListener("click", closeForm)
+    cancel.addEventListener("click", closeForm)
 }
 
 function generateOptions() {
@@ -56,10 +59,15 @@ function addId (event, id) {
         const inputId = document.createElement("input")
         inputId.value = id
         inputId.id = "id"
+        inputId.style.display = "none"
         
-        if(event.target.id === "group-btn") groupForm.prepend(inputId)
-        else taskForm.prepend(inputId)
-       
+        if(event.target.id === "group-btn") {
+            groupForm.prepend(inputId)
+            loadGroup()
+        } else {
+            taskForm.prepend(inputId)
+            loadTask()
+        }
     }
 
     editForm(id)
@@ -89,45 +97,98 @@ export function openForm(event, id) {
 }
 
 export function closeForm(event) {
-    const name = event.target.tagName
-    if (name == "DIALOG") {
-        const openDialog = event.target.className
-        const dialog = document.querySelector(`.${openDialog}`)
-        container.style.display = "none"
-        dialog.close()
-    }
+    const closeWhen = ["task-dialog", "group-dialog", "cancel", "close-submit"]
+    let name = ""
     
+    try {
+        name = event.target.className
+    } catch (error) {
+        name = "close-submit"
+    }
+
+    if(closeWhen.includes(name)) {
+        const dialogs = document.querySelectorAll("dialog")
+        container.style.display = "none"
+        
+        dialogs.forEach(dialog => {
+            if(dialog.open) {
+                const form = dialog.querySelector("form")
+                form.reset()
+                dialog.close()        
+            }
+        })
+    }
 }
 
 function submitForm(event) {
     event.preventDefault()
-    const name = event.submitter.className
     const formType = event.submitter.id
-    const dialogs = document.querySelectorAll("dialog")
-
-    if (name === "add-btn") {
-        save(formType)
-    }
-
-   
-    dialogs.forEach(dialog => {if(dialog.open) dialog.close()})
-    container.style.display = "none"
+    const formName = document.querySelector("form").className
+    save(formType, formName)
+    closeForm(null)
 }
 
-function save(formType) {
+function save(formType, formName) {
     let form = []
     let values = []
-
     if(formType === "task") {
         const inputs = taskForm.querySelectorAll("input")
         const selects = taskForm.querySelectorAll("select")
         form = [...inputs, ...selects]
-        form.forEach(v => values.push(v.value))
+        console.log(inputs)
+        for (let input of inputs) {
+            console.log("form values ", input.value)
+        }
+        form.forEach(v => {
+            console.log("value", v.value)
+            if(!isNaN(v.value)) {
+                const convertValue = parseInt(v.value)
+                values.push(convertValue)
+            } else values.push(v.value)
+        })
         addTask(form, values)
     } else {
-        const input = groupForm.querySelector("input")
-        values = ["none", input.value]
-        addGroup(values)
+        const input = groupForm.querySelectorAll("input")
+        
+        input.forEach(v => {
+            if(!isNaN(v.value)) {
+                const convertValue = parseInt(v.value)
+                values.push(convertValue)
+            } else values.push(v.value)
+        })
+        
+        addGroup(input, values)
+    }
+
+    if (formName === "today") todayDisplayCard()
+
+}
+
+function loadGroup() {
+    const id = groupForm.querySelector("#id").value
+    const group = storage.getGroup(parseInt(id))
+    const input = groupForm.querySelector("#name")
+
+    input.value = group.name
+}
+
+function loadTask() {
+    const id = taskForm.querySelector("#id").value
+    const task = storage.getTask(parseInt(id))
+    const inputs = taskForm.querySelectorAll("input")
+    const selects = taskForm.querySelectorAll("select")
+    console.log("loadtask called")
+    let inputIndex = 0
+    let selectIndex = 0 
+    for(let value in task) {
+        if(inputIndex > 3 && value != "status") {
+            selects[selectIndex].value = task[value]
+            selectIndex++
+        } else if (inputIndex <= 3) {
+            inputs[inputIndex].value = task[value]
+            inputIndex++
+        }
+
     }
 
 }
