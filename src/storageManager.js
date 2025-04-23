@@ -24,7 +24,7 @@ export const storage = function() {
     }
 
     const getAllGroups = function() {
-        const groups = {...localStorage}
+        const groups = getStoredData()
         const allGroups = {}
         for( let group in groups) {
             allGroups[group] = JSON.parse(groups[group])
