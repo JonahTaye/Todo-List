@@ -30,7 +30,7 @@ export function displayCompleted() {
 }
 
 export function displayAll() {
-    header.textContent = "All Tasks"
+    header.textContent = "Inbox"
     formTask.className = ""
     formTask.classList.add("all-tasks")
 
@@ -60,16 +60,20 @@ export function todayDisplayCard() {
 export function displayCardAll() {
     const defaultId = 1000000000001
     const container = document.querySelector(".card-container")
-    const defaultGroup = storage.getGroup(defaultId)
-    const tasks = []
+    try {
+        const defaultGroup = storage.getGroup(defaultId)
+        const tasks = []
 
-    container.innerHTML = ""
-    for (let task of defaultGroup.tasks) {
-        if(task.status != true) tasks.push(task)
+        container.innerHTML = ""
+        for (let task of defaultGroup.tasks) {
+            if(task.status != true) tasks.push(task)
+        }
+
+        tasks.sort((task1, task2) => task1.priority - task2.priority)
+        displayCard(tasks)
+    } catch (error) {
+        
     }
-
-    tasks.sort((task1, task2) => task1.priority - task2.priority)
-    displayCard(tasks)
 
 }
 
@@ -114,17 +118,24 @@ export function displayUpcomingCard() {
 
 export function displayGroupCard(id) {
     formTask.className = ""
-    formTask.classList.add("upcoming")
+    formTask.classList.add(`group_${id}`)
     console.log("Group id", id)
     const container = document.querySelector(".card-container")
-    const groupItems = storage.getGroup(parseInt(id))
-    let tasks = []
+    try {
+        const groupItems = storage.getGroup(parseInt(id))
 
-    header.textContent = groupItems.name
-    tasks = groupItems.tasks
+        let tasks = []
+
+        header.textContent = groupItems.name
+        tasks = groupItems.tasks
+        
+        container.innerHTML = ""
+        tasks.sort((task1, task2) => task1.priority - task2.priority)
+        
+        displayCard(tasks)
+    } catch (error) {
+        displayAll()
+    }
     
-    container.innerHTML = ""
-    tasks.sort((task1, task2) => task1.priority - task2.priority)
     
-    displayCard(tasks)
 }
