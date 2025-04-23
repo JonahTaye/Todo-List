@@ -1,6 +1,7 @@
 import { addGroup, addTask } from "./storeData"
 import { storage } from "./storageManager"
-import { displayCardAll, displayCompletedCard, displayUpcomingCard, todayDisplayCard } from "./sidePaneOptions"
+import { sidePaneDisplay } from "./displayModule"
+
 
 const groupBtn = document.querySelector("#group-btn")
 const mainBtn = document.querySelector("#main-btn")
@@ -26,6 +27,8 @@ function generateOptions() {
     const groups = storage.getAllGroups()
     const select = document.querySelector("#group")
     const defaultId = 1000000000001
+    const taskPane = ["today", "upcoming", "completed", "all-tasks"]
+    const type = taskForm.className
     
     select.innerHTML = ""
     for (let group in groups) {
@@ -34,12 +37,21 @@ function generateOptions() {
         const option = document.createElement("option")
         
         if(currGroup.id === defaultId) {
-            option.textContent = "Today"
-            option.selected = true
-        }
-        else option.textContent = currGroup.name
+            option.textContent = "Inbox"
+        } else option.textContent = currGroup.name
         
         option.value = currGroup.id
+        
+        if(taskPane.includes(type)){
+            if(option.value == defaultId) {
+                option.selected = true
+            }
+        } else {
+            const group = type.split("_")[1]
+            if(option.value === group) {
+                option.selected = true
+            }
+        }
         select.appendChild(option)
     }
 }
@@ -160,21 +172,7 @@ function save(formType, formName) {
         addGroup(input, values)
     }
 
-    switch(formName){
-        case "today":
-            todayDisplayCard()
-            break
-        case "upcoming":
-            displayUpcomingCard()
-            break
-        case "completed":
-            displayCompletedCard()
-            break
-        case "all-tasks":
-            displayCardAll()
-            break
-    } 
-
+    sidePaneDisplay(formName)
 }
 
 function loadGroup() {
