@@ -1,8 +1,12 @@
 import { storage } from "./storageManager"
 import { openForm } from "./forms"
-import { changeStatus, deleteTask } from "./storeData"
+import { changeStatus, deleteGroup, deleteTask, duplicateTask } from "./storeData"
 import edit from "./edit.png"
-import { displayGroupCard } from "./sidePaneOptions"
+import deleteImg from "./trash.png"
+import { format, formatRelative, subDays } from "date-fns"
+import { displayCardAll, displayCompletedCard, 
+        displayUpcomingCard, todayDisplayCard,
+        displayGroupCard  } from "./sidePaneOptions"
 
 export function displayGroup() {
     const options = document.querySelector(".groups.options")
@@ -18,6 +22,7 @@ export function displayGroup() {
         const groupContainer = document.createElement("div")
         const name = document.createElement("div")
         const image = document.createElement("img")
+        const deleteIcon = document.createElement("img")
         
         groupContainer.dataset.id = currGroup.id
         groupContainer.id = `group_${currGroup.id}`
@@ -30,20 +35,45 @@ export function displayGroup() {
         image.src = edit
         image.classList.add("edit")
         image.id = "group-btn"
+
+        deleteIcon.src = deleteImg
+        deleteIcon.classList.add("delete-group")
+        deleteIcon.id = "delete-group"
         
         image.addEventListener("click", (event) => openForm(event, currGroup.id))
         groupContainer.addEventListener("click", clickFunction)
+        deleteIcon.addEventListener("click", (event) => deleteGroup(currGroup.id))
         
-        groupContainer.append(name, image)
+        groupContainer.append(name, deleteIcon, image)
         options.appendChild(groupContainer)
     }
 }
 
-
+export function sidePaneDisplay(type) {
+    switch(type){
+            case "today":
+                todayDisplayCard()
+                break
+            case "upcoming":
+                displayUpcomingCard()
+                break
+            case "completed":
+                displayCompletedCard()
+                break
+            case "all-tasks":
+                displayCardAll()
+                break
+            default:
+                const selectedGroup = type.split("_")[1]
+                displayGroupCard(selectedGroup)
+        } 
+}
 
 export function displayCard(tasks) {
     const card = document.querySelector(".card")
     const container = document.querySelector(".card-container")
+    const defaultId = 1000000000001
+
     
     for (let task of tasks) {
         const clone = card.cloneNode(true)
@@ -51,13 +81,25 @@ export function displayCard(tasks) {
         clone.dataset.id = task.id
         clone.addEventListener("click", updateTask)
         
-        const title = clone.querySelector(".title")
+        const title = clone.querySelector(".card-title")
         title.textContent = task.title
         const description = clone.querySelector(".description")
         description.textContent = task.description
+        
         const date = clone.querySelector(".date")
-        date.textContent = task.dueDate
+        date.textContent = readableDate(task.dueDate)
         const checkbox = clone.querySelector("#status")
+        
+        const group = clone.querySelector(".group-name")
+        const taskGroup = storage.getGroup(task.group)
+        if(task.group === defaultId) {
+            group.textContent = "Inbox"
+            group.style.backgroundColor = taskGroup.color
+        } else {
+            console.log("taskid", task.id)
+            group.textContent = taskGroup.name
+            group.style.backgroundColor = taskGroup.color
+        }
 
 
         switch (task.priority) {
@@ -82,29 +124,39 @@ export function removeCard(id) {
 
     cards.forEach(card => {
         const cardId = parseInt(card.dataset.id)
-        console.log(cardId, "id", id)
+        
         if(cardId === id) {
-            for (let i = 9; i > -2; i--) {
-                let timedelay = 1000 - i*100
-                setTimeout(() => {
-                    card.style.opacity = `0.${i}`
-                    const trash = card.querySelector("img")
-                
-                    card.style.height = `${i - (card.offsetHeight)}rem`
-                    trash.style.height = `0.${i}rem`
-                    card.style.padding = `0.${i}rem`
-                    card.style.marginBottom = `0.${i}rem`
-                    card.style.fontSize = `0.${i}rem`
-                    card.style.transition = "opacity ease-out 1s"
-                    card.style.transition = "height ease-out 1s"
-                    card.style.transition = "font-size ease-out 1s"
-                    
-                }, timedelay);
-            }
+            const totalDuration = 800
+            const steps = 20
+            const interval = totalDuration / steps
+            let step = 0
 
-            setTimeout(() => {
+            const startHeight = card.offsetHeight
+            const trash = card.querySelector("img#delete")
+            const duplicate = card.querySelector("img#duplicate")
+
+            const animation = setInterval(() => {
+                step++
+
+                const progress = step / steps
+                const ease = 1 - (1 - progress) ** 2
+
+                card.style.opacity = 1 - ease
+                card.style.height = `${startHeight * (1 - ease)}px`
+                card.style.padding = `${1 - ease}rem`
+                card.style.marginBottom = `${0.5 * (1 - ease)}rem`
+                card.style.fontSize = `${1 - ease}rem`
+                trash.style.height = `${1 - ease}rem`
+                duplicate.style.height = `${1 - ease}rem`
+
+                card.style.overflow = "hidden"
+                card.style.transition = "none"
+
+                if (step >= steps) {
+                clearInterval(animation)
                 card.remove()
-            }, 1700);
+                }
+            }, interval)
         }
     })
 }
@@ -121,13 +173,17 @@ function updateTask(event) {
         changeStatus(card.dataset.id)
     } else if(id === "delete") {
         deleteTask(card.dataset.id)
+    } else if(id === "duplicate") {
+        duplicateTask(card.dataset.id)
     }
     
 }
 
 function clickFunction(event) {
     let name = event.target.id
-    if(name != "group-btn") {
+    let classname = event.target.className
+    console.log("classname ", classname)
+    if(name != "group-btn" && classname != "delete-group") {
         const options = document.querySelectorAll(".options *")
         const id = name.split("_")[1]
 
@@ -136,8 +192,20 @@ function clickFunction(event) {
         clickedOption.classList.add("active")
 
         displayGroupCard(id)
-    }
-    console.log("name", name)
+    }    
+}
+
+function readableDate(date) {
+    const dateObj = new Date(date)
+    const today = new Date()
+    let formatedDate = formatRelative(dateObj, today)
     
+    if(formatedDate.includes("/")) {
+        formatedDate = format(new Date(date), "MMM dd, yyyy")
+    } else {
+        formatedDate = formatedDate.split("at")[0]
+        formatedDate = formatedDate.charAt(0).toUpperCase() + formatedDate.slice(1)
+    }
+    return formatedDate
 }
 
