@@ -20,6 +20,8 @@ export function displayGroup() {
         if(currGroup.id === defaultId) continue
 
         const groupContainer = document.createElement("div")
+        const leftCont = document.createElement("div")
+        const rightCont = document.createElement("div")
         const name = document.createElement("div")
         const image = document.createElement("img")
         const deleteIcon = document.createElement("img")
@@ -39,12 +41,17 @@ export function displayGroup() {
         deleteIcon.src = deleteImg
         deleteIcon.classList.add("delete-group")
         deleteIcon.id = "delete-group"
+
+        leftCont.classList.add("group-left")
+        rightCont.classList.add("group-right")
         
         image.addEventListener("click", (event) => openForm(event, currGroup.id))
         groupContainer.addEventListener("click", clickFunction)
         deleteIcon.addEventListener("click", (event) => deleteGroup(currGroup.id))
         
-        groupContainer.append(name, deleteIcon, image)
+        leftCont.appendChild(name)
+        rightCont.append(deleteIcon, image)
+        groupContainer.append(leftCont, rightCont)
         options.appendChild(groupContainer)
     }
 }
@@ -104,13 +111,13 @@ export function displayCard(tasks) {
 
         switch (task.priority) {
             case 1:
-                clone.style.borderLeft = "1rem solid red"
+                clone.style.borderLeft = "1rem solid rgb(182, 2, 5)"
                 break
             case 2:
-                clone.style.borderLeft = "1rem solid yellow"
+                clone.style.borderLeft = "1rem solid rgb(243, 61, 64)"
                 break
             case 3: 
-                clone.style.borderLeft = "1rem solid green"
+                clone.style.borderLeft = "1rem solid #ee7272"
                 break
         }
 
