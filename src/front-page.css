@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+
 * {
     margin: 0;
     padding: 0;
@@ -6,6 +9,7 @@
 
 body {
     color: rgb(207, 194, 194);
+    font-family: "Rubik", sans-serif;
 }
 
 .page-container {
@@ -22,7 +26,7 @@ body {
 }
 
 .side-pane {
-    background-color: rgb(189, 20, 20);;
+    background-color: rgb(189, 20, 20);
     height: 100vh;
     flex-direction: column;
     gap: 1.5rem;
@@ -50,6 +54,8 @@ body {
     padding: 0.2rem 0;
 }
 
+
+
 .title {
     font-size: clamp(2rem, 3vw, 5rem);
     font-weight: 700;
@@ -63,12 +69,12 @@ body {
 }
 
 .options * {
-    padding: 0.3rem 0.5rem;
+    padding: 0.4rem 0.5rem;
     border-radius: 0.3rem;
     cursor: pointer;
 }
 
-.options *:not(.active):not(.name):not(.edit):hover {
+.options *:not(.active):not(.group-left):not(.group-right):not(.name):hover {
     background-color: rgba(212, 97, 97, 0.432);
 }
 
@@ -85,7 +91,12 @@ body {
     position: sticky;
     top: 0;
     padding: 1rem;
-    background-color: #131516;
+    /* background-color: #080705; */
+    color: #080705;
+}
+
+.header-container .header{
+    border-color: #080705;
 }
 
 
@@ -120,7 +131,7 @@ body {
     display: grid;
     grid-template-rows: auto 1fr;
     gap: 1rem;
-    background-color: #131516;
+    /* background-color: #080705; */
 }
 
 .card {
@@ -128,8 +139,17 @@ body {
     justify-content: space-between;
     padding: 1rem 2rem;
     margin-bottom: 1rem;
-    border: 1px lightcoral solid;
+    /* border: 1px lightcoral solid; */
     border-radius: 0.3rem;
+    background-color: #d6c2c2;
+    color: #080705;
+    min-width: 30rem;
+    cursor: default;
+}
+
+.card-title {
+    font-size: clamp(1.2rem, 1.8vw, 5rem);
+    font-weight: 600;
 }
 
 .group-container {
@@ -137,13 +157,22 @@ body {
     justify-content: space-between;
 }
 
+.group-pane .options * {
+    padding: 0.2rem;
+}
+
 .group-container img {
     display: none;
-    width: 2.5rem;
+    width: 1.8rem;
+    height: auto;
 }
 
 .group-container:hover img {
     display: block;
+}
+
+.group-right {
+    display: flex;
 }
 
 .left-card {
@@ -152,6 +181,28 @@ body {
 
 .text-content {
     flex-direction: column;
+    gap: 0.3rem;
+    
+}
+
+.text-content .description {
+    width: 30vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.title-container {
+    font-size: inherit;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.group-name {
+    border: 0.15rem solid black;
+    padding: 0.2rem 0.8rem;
+    border-radius: 1rem;
 }
 
 .right-card {
@@ -160,7 +211,8 @@ body {
 }
 
 img {
-    width: 2rem;
+    width: 1.5rem;
+    cursor: pointer;
 }
 
 form {
@@ -221,3 +273,63 @@ dialog {
     background-color: #131516;
     color: rgb(207, 194, 194);
 }
+
+.checkbox {
+    justify-content: center;
+    align-items: center;
+}
+
+:root {
+    --form-control-color: rgb(189, 20, 20);
+    --form-control-disabled: #959495;
+}
+input[type="checkbox"] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    /* Remove most all native input styles */
+    appearance: none;
+    /* For iOS < 15 */
+    background-color: var(--form-background);
+    /* Not removed via appearance */
+    margin: 0;
+  
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+  
+    display: grid;
+    place-content: center;
+  }
+  
+  input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+    transform-origin: bottom left;
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+    /* Windows High Contrast Mode */
+    background-color: CanvasText;
+  }
+  
+  input[type="checkbox"]:checked::before {
+    transform: scale(1);
+  }
+  
+  input[type="checkbox"]:focus {
+    outline: max(2px, 0.15em) solid currentColor;
+    outline-offset: max(2px, 0.15em);
+  }
+  
+  input[type="checkbox"]:disabled {
+    --form-control-color: var(--form-control-disabled);
+  
+    color: var(--form-control-disabled);
+    cursor: not-allowed;
+  }
