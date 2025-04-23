@@ -36,6 +36,7 @@ export class Group {
     constructor( id, name, tasks ) {
         this.groupId = id
         this.name = name
+        this.color = this.generateColor()
         this.tasks = tasks ?? []
     }
 
@@ -46,6 +47,11 @@ export class Group {
 
     get groupId() {
         return this.id
+    }
+
+    generateColor() {
+        const colors = ["#8B0000", "#B22222", "#CD5C5C", "#E9967A", "#FA8072"]
+        return colors[Math.floor(Math.random() * colors.length)];
     }
 
     changeName() {
