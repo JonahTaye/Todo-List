@@ -1,4 +1,4 @@
-import { todayDisplay } from "./today";
+import { displayAll, displayCompleted, displayUpcoming, todayDisplay } from "./sidePaneOptions";
 import { forms } from "./forms";
 import { displayGroup } from "./displayModule";
 import { storage } from "./storageManager";
@@ -27,17 +27,20 @@ function clickFunction(event) {
             todayDisplay()
             break
         case "all-tasks":
+            displayAll()
             break
         case "upcoming":
+            displayUpcoming()
             break
         case "completed":
+            displayCompleted()
             break
     }
 }
 
+displayAll()
 forms()
 storage.initialGroup()
 displayGroup()
-console.log("back")
 
 options.forEach(option => option.addEventListener("click", clickFunction))
